@@ -57,7 +57,7 @@ app.layout = html.Div([
 # Define the callback function to update the input container based on the selected statistics
 @app.callback(
     Output(component_id='select year', component_property='disabled'),
-    Input(component_id='input component',component_property='value'))
+    Input(component_id='dropdown-statistics',component_property='value'))
 
 
 
@@ -111,17 +111,16 @@ def update_output_container(selected_statistics, input_year):
                 ))
 
 # Plot 4 bar chart for the effect of unemployment rate on vehicle type and sales
-        unemp_sales = recession_data.groupby('Vehicle_Type','unemployment_rate')['Automobile_Sales'].mean().reset_index()                           
+        unemp_sales = recession_data.groupby(['Vehicle_Type','unemployment_rate'])['Automobile_Sales'].mean().reset_index()                           
         R_chart4 = dcc.Graph(figure=px.bar(unemp_sales, x='unemployment_rate', y='Automobile_Sales', 
                     title="Unployment Rate Effect on Automobile Sales by Vehicle Type")
         )
 
 
         return [
-            html.Div(className='chart-item', children=[html.Div(children=R_chart1),html.Div(children=R_chart2)],style={'display':'flex'}),
-            html.Div(className='chart-item', children=[html.Div(children=R_chart3),html.Div(children=R_chart4)],style={'display':'flex'})
-            ]
-
+            html.Div(className='chart-item', children=[html.Div(children=R_chart1),html.Div(children=R_chart2)]),
+            html.Div(className='chart-item', children=[html.Div(children=R_chart3),html.Div(children=R_chart4)]
+        )]
 # TASK 2.6: Create and display graphs for Yearly Report Statistics
  # Yearly Statistic Report Plots                             
     elif (input_year and selected_statistics=='Yearly Statistics') :
@@ -147,9 +146,9 @@ def update_output_container(selected_statistics, input_year):
 
 #TASK 2.6: Returning the graphs for displaying Yearly data
         return [
-                html.Div(className='chart-item', children=[html.Div(Y_chart1),html.Div(Y_chart2)],style={'display':'flex'}),
-                html.Div(className='chart-item', children=[html.Div(Y_chart3),html.Div(Y_chart4)],style={'display':'flex'})
-                ]
+                html.Div(className='chart-item', children=[html.Div(Y_chart1),html.Div(Y_chart2)]),
+                html.Div(className='chart-item', children=[html.Div(Y_chart3),html.Div(Y_chart4)])]
+                
         
     else:
         return None
@@ -157,4 +156,3 @@ def update_output_container(selected_statistics, input_year):
 # Run the Dash app
 if __name__ == '__main__':
     app.run_server(debug=True)
-
